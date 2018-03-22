@@ -77,13 +77,50 @@ def random_overlay_image(src_image, overlay_image, minimum_crop):
     overlay_h, overlay_w = overlay_image.shape[:2]
     shift_item_h, shift_item_w = overlay_h * (1 - minimum_crop), overlay_w * (1 - minimum_crop)
     scale_item_h, scale_item_w = overlay_h * (minimum_crop * 2 - 1), overlay_w * (minimum_crop * 2 - 1)
-    y = int(np.random.randint(src_h - scale_item_h) - shift_item_h)
-    x = int(np.random.randint(src_w - scale_item_w) - shift_item_w)
+
+    # eva = src_h-scale_item_h
+    # if eva <0:
+    # 	eva = 0
+
+    if src_h <= scale_item_h:
+        src_h, scale_item_h = scale_item_h, src_h
+
+    sh = src_h - scale_item_h
+    a = np.random.randint(sh)
+    # print(a)
+    y = int(a - shift_item_h)
+
+    if src_w <= scale_item_w:
+        src_w, scale_item_w = scale_item_w, src_w
+
+    sw = src_w - scale_item_w
+    b = np.random.randint(sw)
+    # print(b)
+    x = int(b - shift_item_w)
+
+    # y = int(np.random.randint(eva) - shift_item_h)
+    # print(src_w-scale_item_w)
+    # if (src_w-scale_item_w)<0:
+    # 	(src_w-scale_item_w)*(-1)
+    # 	print(src_w-scale_item_w)
+    # x = int(np.random.randint(src_w-scale_item_w) - shift_item_w)
+    # gelion = src_w-scale_item_w
+    # if gelion<0:
+    # 	gelion = 0
+    # x = int(np.random.randint(gelion) - shift_item_w)
+
     image = overlay(src_image, overlay_image, x, y)
-    bbox = (
-    (np.maximum(x, 0), np.maximum(y, 0)), (np.minimum(x + overlay_w, src_w - 1), np.minimum(y + overlay_h, src_h - 1)))
+    bbox = ((np.maximum(x, 0), np.maximum(y, 0)), (np.minimum(x + overlay_w, src_w - 1), np.minimum(y + overlay_h, src_h - 1)))
 
     return image, bbox
+
+    # y = int(np.random.randint(src_h - scale_item_h) - shift_item_h)
+    # x = int(np.random.randint(src_w - scale_item_w) - shift_item_w)
+    # image = overlay(src_image, overlay_image, x, y)
+    # bbox = (
+    # (np.maximum(x, 0), np.maximum(y, 0)), (np.minimum(x + overlay_w, src_w - 1), np.minimum(y + overlay_h, src_h - 1)))
+    #
+    # return image, bbox
 
 
 # 4点座標のbboxをyoloフォーマットに変換

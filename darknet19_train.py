@@ -20,7 +20,7 @@ def main():
     item_path = "./items"
     background_path = "./backgrounds"
     label_file = "./data/label.txt"
-    backup_path = "backup"
+    backup_path = "backup_19"
     batch_size = 32
     max_batches = 3000
     learning_rate = 0.001
@@ -102,8 +102,8 @@ def main():
             print("saving model to %s" % (model_file))
             torch.save(model.state_dict(), model_file)
 
-    print("saving model to %s/darknet19_final.model" % (backup_path))
-    torch.save(model.state_dict(), "%s/darknet19_final.model" % (backup_path))
+    print("saving model to %s/darknet_19_final.model" % (backup_path))
+    torch.save(model.state_dict(), "%s/darknet_19_final.model" % (backup_path))
 
 
 if __name__ == '__main__':
