@@ -43,7 +43,7 @@ def main():
     # weight_path = ''
     # model.load_state_dict(weight_path)
 
-    optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=momentum)
+    optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=momentum, weight_decay=weight_decay)
     criterion = nn.MSELoss()
 
     def lr_scheduler(optimizer, batch, lr_decay_power):

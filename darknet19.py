@@ -51,25 +51,21 @@ class Darknet19(nn.Module):
             # conv2
             ['M', (1024, 3), (512, 1), (1024, 3), (512, 1), (1024, 3)],
             # ------------
-            # output
+            # pred
             [(self.num_classes, 1)],
         ]
 
         # darknet
         self.conv1s, c1 = _make_layers(3, net_cfgs[0:5])
         self.conv2, c2 = _make_layers(c1, net_cfgs[5])
-        # ---
+        # pred
         self.conv3, c3 = _make_layers(c2, net_cfgs[6])
 
     def forward(self, im_data, gt_boxes=None, gt_classes=None, dontcare=None, size_index=0):
         conv1s = self.conv1s(im_data)
         conv2 = self.conv2(conv1s)
         conv3 = self.conv3(conv2)
-        n_global_average_pool = nn.AvgPool2d(kernel_size=conv3.size(-1), stride=1, padding=0)
-        # print(conv3.size(-1))
-
-        # global_average_pool = self.global_average_pool(conv3)
-        global_average_pool = n_global_average_pool(conv3)
+        global_average_pool = nn.AvgPool2d(kernel_size=conv3.size(-1), stride=1, padding=0)(conv3)
 
         # for detection
         prob_pred = F.softmax(global_average_pool.view(global_average_pool.size(0), -1), dim=1)

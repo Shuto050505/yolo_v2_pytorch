@@ -20,6 +20,7 @@ def main():
     item_path = "./items"
     background_path = "./backgrounds"
     label_file = "./data/label.txt"
+    initial_weights_file = "backup/darknet19_final.model"
     backup_path = "backup_19_448"
     batch_size = 32
     max_batches = 3000
@@ -40,10 +41,9 @@ def main():
     model = Darknet19(num_classes=10, phase='train')
 
     # Load Weight
-    # weight_path = ''
-    # model.load_state_dict(weight_path)
+    model.load_state_dict(initial_weights_file)
 
-    optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=momentum)
+    optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=momentum, weight_decay=weight_decay)
     criterion = nn.MSELoss()
 
     def lr_scheduler(optimizer, batch, lr_decay_power):
